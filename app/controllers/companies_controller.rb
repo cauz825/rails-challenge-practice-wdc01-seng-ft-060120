@@ -12,8 +12,19 @@ class CompaniesController < ApplicationController
     end
 
     def create
-        @company = Company.create(company_params)
-        redirect_to company_path(@company)
+        @company = Company.new(company_params)
+        if @company.save
+            params[:company][:offices_attributes].each do |index, building_hash|
+                building_hash[:offices].each do |floor|
+                    if !floor.empty?
+                        Office.create(company_id: @company.id, building_id: building_hash[:id], floor: floor)
+                    end
+                end
+            end
+            redirect_to company_path(@company)
+        else
+            render :new
+        end
     end
 
     private
