@@ -16,7 +16,6 @@ class CompaniesController < ApplicationController
         redirect_to company_path(@company)
     end
 
-
     private
 
     def company_params
